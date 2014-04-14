@@ -48,7 +48,7 @@ public interface MapEntityStore
 
     Input<Reader, IOException> entityStates();
 
-    void applyChanges( MapChanges changes )
+   void applyChanges( MapChanges changes )
         throws IOException;
 
     interface MapChanges

@@ -19,6 +19,7 @@ import org.qi4j.api.mixin.Mixins;
 import org.qi4j.api.service.ServiceComposite;
 import org.qi4j.entitystore.map.JSONMapEntityStoreMixin;
 import org.qi4j.entitystore.map.StateStore;
+import org.qi4j.library.locking.LockingAbstractComposite;
 import org.qi4j.spi.entitystore.*;
 
 /**
@@ -28,6 +29,6 @@ import org.qi4j.spi.entitystore.*;
 @Concerns( { StateChangeNotificationConcern.class, ConcurrentModificationCheckConcern.class } )
 @Mixins( { JSONMapEntityStoreMixin.class, MemoryMapEntityStoreMixin.class } )
 public interface MemoryEntityStoreService
-    extends EntityStore, EntityStateVersions, BackupRestore, StateStore, ServiceComposite
+    extends EntityStore, EntityStateVersions, BackupRestore, StateStore, ServiceComposite, LockingAbstractComposite
 {
 }

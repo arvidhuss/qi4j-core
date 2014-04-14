@@ -205,10 +205,16 @@ public final class ValueCompositeType
                 // Not found in JSON or wrong format - try defaulting it
                 try
                 {
-                    Object defaultValue = DefaultValues.getDefaultValue( module.classLoader()
-                                                                             .loadClass( propertyType.type()
-                                                                                             .type().name() ) );
-                    values.put( propertyType.qualifiedName(), defaultValue );
+                    try {
+                        Object defaultValue = DefaultValues.getDefaultValue( module.classLoader()
+                                                                                 .loadClass( propertyType.type()
+                                                                                                 .type().name() ) );
+                        values.put( propertyType.qualifiedName(), defaultValue );
+                    } catch ( IllegalArgumentException iae )
+                    {
+                        // There is no default value - set null instead.
+                        values.put( propertyType.qualifiedName(), null);
+                    }
                 }
                 catch( ClassNotFoundException e1 )
                 {

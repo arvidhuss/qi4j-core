@@ -14,15 +14,16 @@
 
 package org.qi4j.runtime.query;
 
+import org.qi4j.api.property.Property;
+import org.qi4j.api.query.Query;
+import org.qi4j.api.query.grammar.BooleanExpression;
+import org.qi4j.api.query.grammar.OrderBy;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import org.qi4j.api.property.Property;
-import org.qi4j.api.query.Query;
-import org.qi4j.api.query.grammar.BooleanExpression;
-import org.qi4j.api.query.grammar.OrderBy;
 
 /**
  * JAVADOC
@@ -183,19 +184,21 @@ public class IterableQuery<T>
                 OrderBy orderBySegment = orderBySegments[ i ];
                 try
                 {
+                    int returnValue = 0;
                     final Property prop1 = orderBySegment.propertyReference().eval( o1 );
                     final Property prop2 = orderBySegment.propertyReference().eval( o2 );
                     if( prop1 == null || prop2 == null )
                     {
                         if( prop1 == null && prop2 == null )
                         {
-                            return 0;
+                            returnValue = 0;
                         }
                         else if( prop1 != null )
                         {
-                            return 1;
+                            returnValue = 1;
                         }
-                        return -1;
+                        returnValue = -1;
+                       return withSortOrder( orderBySegment, returnValue );
                     }
                     final Object value1 = prop1.get();
                     final Object value2 = prop2.get();
@@ -203,28 +206,19 @@ public class IterableQuery<T>
                     {
                         if( value1 == null && value2 == null )
                         {
-                            return 0;
+                            returnValue = 0;
                         }
                         else if( value1 != null )
                         {
-                            return 1;
+                            returnValue = 1;
                         }
-                        return -1;
+                        returnValue = -1;
+                       return withSortOrder( orderBySegment, returnValue );
                     }
                     if( value1 instanceof Comparable )
                     {
-                        int result = ( (Comparable) value1 ).compareTo( value2 );
-                        if( result != 0 )
-                        {
-                            if( orderBySegment.order() == OrderBy.Order.ASCENDING )
-                            {
-                                return result;
-                            }
-                            else
-                            {
-                                return -result;
-                            }
-                        }
+                        return withSortOrder( orderBySegment, ((Comparable) value1).compareTo( value2 ) );
+
                     }
                 }
                 catch( Exception e )
@@ -236,5 +230,21 @@ public class IterableQuery<T>
 
             return 0;
         }
+
+       private int withSortOrder(OrderBy orderBy, int comparisonResult )
+       {
+          if( comparisonResult != 0 )
+          {
+             if( orderBy.order() == OrderBy.Order.ASCENDING )
+             {
+                return comparisonResult;
+             }
+             else
+             {
+                return -comparisonResult;
+             }
+          }
+          return comparisonResult;
+       }
     }
 }

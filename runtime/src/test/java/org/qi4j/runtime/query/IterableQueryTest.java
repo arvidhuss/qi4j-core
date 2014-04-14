@@ -17,10 +17,6 @@
  */
 package org.qi4j.runtime.query;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -50,6 +46,10 @@ import org.qi4j.runtime.query.model.values.ContactValue;
 import org.qi4j.runtime.query.model.values.ContactsValue;
 import org.qi4j.spi.query.EntityFinderException;
 import org.qi4j.test.EntityTestAssembler;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.qi4j.api.query.QueryExpressions.*;
@@ -458,6 +458,22 @@ public class IterableQueryTest
         query.orderBy( orderBy( person.name(), OrderBy.Order.DESCENDING ) );
         verifyOrderedResults( query, "Vivian Smith", "Joe Doe", "Ann Doe" );
     }
+
+   /*@Test
+   public void givenOrderByNameAscQueryWhenExecutedReturnCorrect()
+         throws EntityFinderException
+   {
+      //###
+      QueryBuilder<Person> qb = qbf.newQueryBuilder( Person.class );
+      // should return all Persons born after 1973 (Ann and Joe Doe) sorted descending by name
+      Person person = templateFor( Person.class );
+      Query<Person> query = qb.where(
+            gt( person.yearOfBirth(), 1973 )
+      ).newQuery( Network.persons() );
+      query.orderBy( orderBy( person.name(), OrderBy.Order.DESCENDING ) );
+      verifyOrderedResults( query, "Vivian Smith", "Joe Doe", "Ann Doe" );
+   }*/
+
 
     @Test
     public void givenOrderByMultipleQueryWhenExecutedThenReturnCorrect()

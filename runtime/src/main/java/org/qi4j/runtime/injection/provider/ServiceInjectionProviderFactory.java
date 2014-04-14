@@ -450,7 +450,10 @@ public final class ServiceInjectionProviderFactory
                 }
                 for( ServiceModel service : services )
                 {
-                    identities.add( service.identity() );
+                    if( !identities.contains( service.identity()))
+                    {
+                        identities.add( service.identity() );
+                    }
                 }
             }
 
@@ -464,7 +467,10 @@ public final class ServiceInjectionProviderFactory
                 }
                 for( ImportedServiceModel service : importedServices )
                 {
-                    identities.add( service.identity() );
+                    if( !identities.contains( service.identity()))
+                    {
+                        identities.add( service.identity() );
+                    }
                 }
             }
 
